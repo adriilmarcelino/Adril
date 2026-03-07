@@ -1,1 +1,676 @@
-asd
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OOP Report - Adriel nofra marcelino</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --surface-hover: #1c1c1c;
+            --accent: #ff6b00;
+            --accent-glow: rgba(255, 107, 0, 0.3);
+            --text-pri: #ffffff;
+            --text-sec: #a1a1aa;
+            --border: #27272a;
+            --code-bg: #000000;
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-pri);
+            background-color: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Industrial Grid Background */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 32px 32px;
+            z-index: -2;
+        }
+
+        /* Deep Gradient Overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% -20%, rgba(255, 107, 0, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        header {
+            text-align: center;
+            padding: 120px 20px 80px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2.5rem, 12vw, 4.5rem);
+            letter-spacing: -0.05em;
+            color: #fff;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        header p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            background: rgba(255, 107, 0, 0.1);
+            padding: 6px 16px;
+            display: inline-block;
+            border-radius: 4px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 48px;
+            margin-bottom: 32px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        section.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        section:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.05);
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 28px;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        h2::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin-left: 20px;
+            opacity: 0.3;
+        }
+
+        p {
+            color: var(--text-sec);
+            font-size: 1rem;
+            line-height: 1.75;
+            margin-bottom: 24px;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        ul li {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--text-sec);
+            transition: 0.2s;
+        }
+
+        ul li:hover {
+            border-color: rgba(255, 107, 0, 0.2);
+            color: #fff;
+        }
+
+        .highlight {
+            color: #fff;
+            background: var(--accent);
+            padding: 2px 8px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 2px;
+            font-weight: 800;
+        }
+
+        /* CODE BOX STYLING - Industrial/Monochrome */
+        .code-container {
+            margin: 32px 0;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            border-left: 4px solid var(--border);
+        }
+
+        .code-container:hover {
+            border-left-color: var(--accent);
+        }
+
+        .code-header {
+            background: #0f0f0f;
+            padding: 12px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #52525b;
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        pre {
+            padding: 24px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #d1d1d6;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 14px 32px;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: 0.3s all;
+            border-radius: 2px;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 40px var(--accent-glow);
+            letter-spacing: 0.2em;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            max-width: 1200px;
+            height: 85vh;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close {
+            position: absolute;
+            right: 24px;
+            top: 16px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 80px 20px;
+            color: #3f3f46;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Adriel nofra marcelino</h1>
+        <p>NIM : 251410017 | KELAS : SI2A</p>
+    </header>
+
+    <div class="container">
+
+        <section>
+            <h2>01. Pengertian OOP</h2>
+            <p>
+                <span class="highlight">Object Oriented Programming (OOP)</span> Object Oriented Programming (OOP)
+                adalah paradigma pemrograman yang berorientasi pada objek, dimana program dibuat menggunakan class dan
+                objek.
+                Dalam OOP terdapat beberapa konsep utama seperti Encapsulation, Inheritance, Polymorphism, dan
+                Abstraction yang membantu membuat program lebih terstruktur, modular, dan mudah dikembangkan.
+            </p>
+        </section>
+
+        <section>
+            <h2>02. Konsep Dasar</h2>
+            <ul>
+                <li><span class="highlight">Class</span>: Blueprint atau cetakan untuk membuat objek.</li>
+                <li><span class="highlight">Object</span>: Instance nyata yang tercipta dari sebuah class.</li>
+                <li><span class="highlight">Attribute</span>: Representasi data melalui variabel di dalam class.</li>
+                <li><span class="highlight">Method</span>: Logika fungsional atau fungsi di dalam class.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>03. Class Sederhana (Drone)</h2>
+            <p>Pada contoh program di bawah ini terdapat class Drone yang memiliki atribut model dan jumlahBalingBaling
+                untuk menyimpan data teknis perangkat.
+                Terdapat pula method terbang() dan mendarat() sebagai aksi utama dari objek drone tersebut.</p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class Drone {
+  String? model;
+  int? jumlahBalingBaling;
+  
+  void terbang() {
+    print('Drone $model sedang lepas landas...');
+  }
+  
+  void mendarat() {
+    print('Drone $model telah mendarat dengan aman.');
+  }
+}
+
+void main() {
+  Drone droneAriel = Drone();
+  
+  droneAriel.model = "DJI Mavic Air";
+  droneAriel.jumlahBalingBaling = 4;
+  droneAriel.terbang();
+  droneAriel.mendarat();
+}</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=9ec36f128e54ab446cb5cf378011073b')">Run Program</button>
+        </section>
+
+        <section>
+            <h2>04. Object Instantiation</h2>
+            <p>Object Instantiation adalah proses menciptakan wujud nyata (objek) dari sebuah rancangan (class).
+                Pada kode berikut, objek rumahPintar dibuat dari class SmartHome, lalu diisi dengan data lokasi dan
+                status suhu ruangan.
+            </p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class SmartHome {
+  String? lokasi; 
+  double? suhu; 
+}
+
+void main() {
+  SmartHome rumahPintar = SmartHome();
+  
+  rumahPintar.lokasi = "Palembang"; 
+  rumahPintar.suhu = 24.5;
+
+  print("Lokasi Rumah: ${rumahPintar.lokasi}"); 
+  print("Suhu Ruangan: ${rumahPintar.suhu} Derajat");
+}</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=45ae1369e770115b80c32794617a8791')">Run Program</button>
+        </section>
+
+        <section>
+            <h2>05. Constructor</h2>
+            <p>Constructor digunakan untuk menginisialisasi nilai atribut secara otomatis saat objek baru lahir.
+                Pada contoh class Kamera, constructor Kamera(this.merk, this.resolusi) memungkinkan pengisian data
+                langsung ketika variabel kameraAdriel dideklarasikan.</p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class Kamera {
+  String merk; 
+  int resolusi;
+
+  Kamera(this.merk, this.resolusi);
+
+  void ambilGambar() {
+    print('Menangkap gambar dengan $merk ($resolusi MP)...'); 
+  }
+}
+
+void main() {
+  Kamera kameraAdriel = Kamera("Sony Alpha", 24);
+  kameraAdriel.ambilGambar(); 
+}</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=4439d7abd221e9c64c7c011a291b7e06')">Run Program</button>
+        </section>
+
+        <section>
+            <h2>06. Practice: Mahasiswa</h2>
+            <p>Program ini mengelola data pendidikan menggunakan class Mahasiswa. Method tampilkanInfo() digunakan
+                untuk membungkus logika pencetakan data agar terlihat rapi dan profesional saat dijalankan di konsol.
+            </p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class Mahasiswa {
+  String nama; 
+  String nim; 
+  double ipk;  
+
+  Mahasiswa(this.nama, this.nim, this.ipk);
+
+  void tampilkanInfo() {
+    print('========= DATA MAHASISWA =========');
+    print('NAMA : $nama');
+    print('NIM  : $nim');
+    print('IPK  : $ipk');
+    print('==================================');
+  }
+}
+
+void main() {
+  Mahasiswa mhs = Mahasiswa("Adriel nofra marcelino", "251410017", 3.80);
+  mhs.tampilkanInfo();
+}</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=71668011b0649ee6e1157ea46785e93e')">Run Program</button>
+        </section>
+
+        <section>
+            <h2>07. Encapsulation</h2>
+            <p>Enkapsulasi melindungi integritas data dengan menyembunyikan variabel _poin menggunakan akses privat.
+                Poin hanya bisa dimodifikasi melalui method tambahPoin() dan dibaca melalui getter cekPoin untu menjaga
+                keamanan data member.
+            </p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class Member {
+  String nama;
+  int _poin; 
+
+  Member(this.nama, this._poin);
+
+  void tambahPoin(int jumlah) {
+    if (jumlah > 0) _poin += jumlah;
+  }
+  
+  int get cekPoin => _poin;
+}
+
+void main() {
+  Member memberAdriel = Member("Adriel Nofra", 100);
+  print('Member: ${memberAdriel.nama}'); 
+  memberAdriel.tambahPoin(50);
+  print('Total Poin: ${memberAdriel.cekPoin}'); 
+}</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=f7fd462d0c75b58114e8b2e9d37a8e03')">Run Program</button>
+        </section>
+
+        <section>
+            <h2>08. This Keyword</h2>
+            <p>Keyword "this" digunakan sebagai referensi ke atribut di dalam class itu sendiri. Pada contoh class
+                Sistem,
+                this.versi digunakan agar komputer tahu bahwa yang dimaksud adalah variabel milik class, bukan parameter
+                fungsi.</p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class Sistem {
+  String namaOS; 
+  Sistem(this.namaOS);
+}
+
+void main() {
+  Sistem osAdriel = Sistem("ArielOS v1.0");
+  print("Sistem Operasi: ${osAdriel.namaOS}"); 
+}
+</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=3d51c3e3c0f9b223a9759dc5131008ad')">Run Program</button>
+        </section>
+
+        <section>
+            <h2>09. Product Class (Digital)</h2>
+            <p>Class ProdukDigital menggunakan "Named Parameters" untuk memudahkan pemetaan data saat pembuatan objek.
+                Dengan fitur ini, kita bisa memberikan argumen berdasarkan nama filenya, yang membuat kode lebih mudah
+                dibaca dan dipelihara.</p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class ProdukDigital {
+  final String nama, lisensi; 
+  final double harga; 
+
+  ProdukDigital({
+    required this.nama,
+    required this.harga,
+    this.lisensi = 'Single User',
+  });
+}
+
+void main() {
+  ProdukDigital item1 = ProdukDigital(
+    nama: "UI Design Pack",
+    harga: 250000,
+    lisensi: "Commercial",
+  );
+
+  ProdukDigital item2 = ProdukDigital(
+    nama: "Asset 3D Model",
+    harga: 150000,
+  );
+
+  print('Produk 1: ${item1.nama} (Lisensi: ${item1.lisensi})'); 
+  print('Produk 2: ${item2.nama}'); 
+}</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=5cb41f263d8b0769b808598c0b07283e')">Run Program</button>
+        </section>
+
+        <section>
+            <h2>10. Kesimpulan</h2>
+            <p>Pemrograman Berorientasi Objek di Dart memberikan fondasi yang kuat untuk membangun aplikasi yang bersih,
+                modular, dan siap dikembangkan lebih jauh.</p>
+        </section>
+
+        <section>
+            <h2>11. Bonus: hewan Class</h2>
+            <p>Kelas Hewan pada kode di bawah merupakan implementasi dasar OOP yang memiliki atribut nama sebagai
+                identitas
+                dan metode bersuara() sebagai perilaku fungsional dari objek tersebut.
+            </p>
+
+            <div class="code-container">
+                <div class="code-header">DART SOURCE CODE</div>
+                <pre><code>// Nama   : Adriel nofra marcelino
+// Nim    : 251410017
+// Kelas  : SI2A
+
+class Hewan {
+  String nama;
+  Hewan(this.nama);
+  void bersuara() {
+    print('$nama sedang bersuara...');
+  }
+}
+void main() {
+  var petAdriel = Hewan('Anjing');
+  print('Nama Hewan: ${petAdriel.nama}');
+  petAdriel.bersuara();
+}</code></pre>
+            </div>
+
+            <button onclick="openModal('https://dartpad.dev/?id=e63eb9f0c582f88f8ea03444c194b303')">Run Program</button>
+        </section>
+
+    </div>
+
+    <footer>
+        &copy; 2025 Adriel nofra marcelino &bull; Tugas 2
+    </footer>
+
+    <!-- MODAL -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <iframe id="dartFrame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Reveal Animations
+        const sections = document.querySelectorAll("section");
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(sec => observer.observe(sec));
+
+        // Modal Logic
+        function openModal(link) {
+            document.getElementById("modal").style.display = "block";
+            document.getElementById("dartFrame").src = link;
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+            document.getElementById("dartFrame").src = "";
+            document.body.style.overflow = "auto";
+        }
+
+        window.onclick = function (e) {
+            if (e.target == document.getElementById("modal")) closeModal();
+        }
+
+        // document.addEventListener('contextmenu', e => e.preventDefault());
+        // document.onkeydown = function (e) {
+        //     if (e.keyCode == 123) return false; // F12
+        //     if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false; // Ctrl+Shift+I/J/C
+        //     if (e.ctrlKey && e.keyCode == 85) return false; // Ctrl+U
+        //     if (e.ctrlKey && e.keyCode == 83) return false; // Ctrl+S
+        // };
+        // document.onselectstart = function () { return false; };
+
+    </script>
+
+</body>
+
+</html>
